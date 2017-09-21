@@ -1,2 +1,2 @@
-# Plugin's routes
-# See: http://guides.rubyonrails.org/routing.html
+get 'schedules', to: 'schedules#index'
+get 'schedules/edit', to: 'schedules#edit'
