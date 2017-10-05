@@ -2,7 +2,7 @@
   <legend><%=l(:shift_schedule_title)%></legend>
   <div class="tabular">
     <%= labelled_fields_for :pref, @user.pref do |pref_fields| %>
-        <p><%= pref_fields.number_field :shift_hours, in: 1..100%></p>
+        <p><%= pref_fields.number_field :shift_hours, in: 0..100%></p>
     <% end %>
   </div>
 </fieldset>
