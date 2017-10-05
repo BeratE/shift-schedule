@@ -1,10 +1,13 @@
 Redmine::Plugin.register :shift_schedule do
+  require_dependency 'hooks/shift_schedule_view_hooks'
+
   name 'Shift Schedule'
   author 'Berat Ertural'
   description 'This is a plugin for scheduling the developer shifts on different projects and version.'
   version '0.0.1'
   url 'https://github.com/BeratE/shift-schedule'
 
+  permission :schedules, { :schedules => :index }, :public => true
   menu :top_menu, :schedules, { :controller => 'schedules', :action => 'index' }, :caption => 'Schedule'
-  settings :default => {'empty' => true}, :partial => 'settings/schedule_settings'
+  settings :default => {'budget_buffer' => 20}, :partial => 'settings/schedule_settings'
 end

@@ -1,3 +1,6 @@
 # English strings go here for Rails i18n
 en:
-  # my_label: "My label"
+   shift_schedule_title: "Shift Schedule"
+   shift_schedule_settings_title: "Global Schedule Buffer"
+
+   field_shift_hours: "Weekly shift hours"

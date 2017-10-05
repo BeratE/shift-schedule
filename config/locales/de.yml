@@ -1,0 +1,6 @@
+# German strings go here for Rails i18n
+de:
+   shift_schedule_title: "Arbeitszeiten Planer"
+   shift_schedule_settings_title: "Globaler Zeitplan Puffer"
+
+   field_shift_hours: "Wöchentliche Arbeitszeiten"
