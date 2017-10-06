@@ -1,0 +1,37 @@
+<h3>
+  <%= l :current_week_title %>
+  <%= ": #{@curr_date.strftime("%V")}/#{@curr_date.year}" %>
+</h3>
+
+<div class="date">
+  <%= form_tag("/schedules", method: "get") do %>
+    <%= label_tag(:schedule_date, "Date") %>
+    <input id="schedule_date" name="schedule_date" type="text" size="10"
+      value="<%= "#{@curr_date.strftime('%Y %m %d').gsub!(' ','-')}" %>" readonly />
+    <script>
+      $(function() { $('#schedule_date').addClass('date').datepicker(datepickerOptions); });
+    </script>
+    <%= submit_tag("Ok") %>
+  <% end %>
+</div>
+
+<article class="details">
+  <%= l :shift_schedule_settings_title %>
+  <%= ": #{Setting.plugin_shift_schedule['buffer']}%" %>
+</article
+
+<div class="list">
+  <table style="width:100%">
+   <tr>
+     <th>Name</th>
+     <th>h/W</th>
+   </tr>
+   </tr>
+   <% @users.each do |user| %>
+     <tr>
+       <td><%= "#{user.firstname} #{user.lastname}" %></td>
+       <td><%= "#{ava_time(user)}/#{user.shift_hours}" %></td>
+     </tr>
+   <% end %>
+  </table>
+</div>

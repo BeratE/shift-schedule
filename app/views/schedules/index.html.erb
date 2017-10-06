@@ -1,3 +1,22 @@
-<h2>Shift Schedule</h2>
-<div>
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag("schedules", :plugin => "shift_schedule") %>
+  <%= javascript_include_tag("ui", :plugin => "shift_schedule") %>
+<% end %>
+
+<div id="container">
+  <div id="head">
+    <h2 class="title"><%= l :shift_schedule_title %></h2>
+  </div>
+  <div id="main">
+    <div class="nav">
+      <%= render :partial => "navigation" %>
+    </div>
+    <div class="content">
+      <div class="info">
+        <% if @schedules.empty? then %>
+          <h3><%= l :nothing_scheduled %></h3>
+        <% end %>
+      </div>
+    </div>
+  </div>
 </div>

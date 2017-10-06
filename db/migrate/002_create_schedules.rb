@@ -3,8 +3,8 @@ class CreateSchedules < ActiveRecord::Migration
     create_table :schedules do |t|
       t.integer :year
       t.integer :week
-      t.references :user
-      t.references :version
+      t.references :user, index: true
+      t.references :version, index: true
       t.integer :hours
     end
 

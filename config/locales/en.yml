@@ -2,5 +2,8 @@
 en:
    shift_schedule_title: "Shift Schedule"
    shift_schedule_settings_title: "Global Schedule Buffer"
+   current_week_title: "Selected Week"
+
+   nothing_scheduled: "Nothing scheduled for this Week."
 
    field_shift_hours: "Weekly shift hours"

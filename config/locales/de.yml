@@ -2,5 +2,8 @@
 de:
    shift_schedule_title: "Arbeitszeiten Planer"
    shift_schedule_settings_title: "Globaler Zeitplan Puffer"
+   current_week_title: "Ausgewählte Woche"
+
+   nothing_scheduled: "Für diese Woche ist nichts geplant."
 
    field_shift_hours: "Wöchentliche Arbeitszeiten"

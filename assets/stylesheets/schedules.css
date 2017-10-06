@@ -1,0 +1,30 @@
+#container {
+}
+
+#head {
+  clear: left;
+}
+
+#main {
+
+}
+
+.title {
+}
+
+.nav {
+  float: left;
+  max-width: 20%;
+  margin: 0;
+  padding: 1em;
+}
+
+.content {
+  overflow: hidden;
+  margin-left: 20%;
+  padding: 1em;
+}
+
+.info {
+  padding: 5px;
+}
