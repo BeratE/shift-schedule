@@ -1,12 +1,12 @@
-#container {
+.container{
+
 }
 
-#head {
-  clear: left;
+.head {
 }
 
-#main {
-
+.main {
+  width: 100%;
 }
 
 .title {
@@ -15,16 +15,46 @@
 .nav {
   float: left;
   max-width: 20%;
-  margin: 0;
+  border-right: 1px solid grey;
+  margin: 0px;
   padding: 1em;
 }
 
-.content {
-  overflow: hidden;
-  margin-left: 20%;
-  padding: 1em;
+.details {
+  font-size: 16px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 .info {
   padding: 5px;
+  margin-bottom: 40px;
+}
+
+.content {
+  overflow: auto;
+  margin-left: 20%;
+  font-size: 16px;
+}
+
+.schedule {
+  padding: 10px;
+  border-collapse: collapse;
+}
+
+.schedule tr th {
+  border-bottom: 1px solid;
+  padding-bottom: 5px;
+  min-width: 100px;
+}
+
+.schedule tr td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-bottom: 1px solid;
+  text-align: left;
+}
+
+.schedule tr .empty {
+  background-color: gainsboro ;
 }

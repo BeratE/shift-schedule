@@ -3,19 +3,23 @@
   <%= javascript_include_tag("ui", :plugin => "shift_schedule") %>
 <% end %>
 
-<div id="container">
-  <div id="head">
+<div class="container">
+  <div class="head">
     <h2 class="title"><%= l :shift_schedule_title %></h2>
   </div>
-  <div id="main">
+  <div class="main">
     <div class="nav">
       <%= render :partial => "navigation" %>
     </div>
     <div class="content">
       <div class="info">
         <% if @schedules.empty? then %>
-          <h3><%= l :nothing_scheduled %></h3>
+          <h2><%= l :nothing_scheduled %></h2>
         <% end %>
+      </div>
+
+      <div class="scheduling">
+        <%= render :partial => "scheduling" %>
       </div>
     </div>
   </div>

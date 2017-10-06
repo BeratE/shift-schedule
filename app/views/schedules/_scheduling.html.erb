@@ -1,0 +1,22 @@
+<table class="schedule">
+  <tr>
+    <th>Name</th>
+    <% @versions.each do |v| %>
+      <th><%= " #{v.name} " %></th>
+    <% end %>
+    <th>
+      <%= button_to "+Version", action: "new" %>
+    </th>
+    <th>h/W</th>
+  </tr>
+  <% @users.each do |user| %>
+  <tr>
+    <td><%= "#{user.firstname} #{user.lastname}" %></td>
+    <% @versions.each do |v| %>
+      <th></th>
+    <% end %>
+    <td class="empty"></td>
+    <td><%= "#{ava_time(user)}/#{ava_time(user)}" %></td>
+  </tr>
+  <% end %>
+</table>
