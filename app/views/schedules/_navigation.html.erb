@@ -6,7 +6,7 @@
 <div class="date">
   <%= form_tag("/schedules", method: "get") do %>
     <input id="schedule_date" name="schedule_date" type="text" size="10"
-      value="<%= "#{@curr_date.strftime('%Y %m %d').gsub!(' ','-')}" %>" readonly />
+      value="<%= "#{format_time @curr_date}" %>" readonly />
     <script>
       $(function() { $('#schedule_date').addClass('date').datepicker(datepickerOptions); });
     </script>
@@ -14,7 +14,13 @@
   <% end %>
 </div>
 
-<article class="details">
+<div class="details">
   <%= l :shift_schedule_settings_title %>
   <%= ": #{Setting.plugin_shift_schedule['buffer']}%" %>
-</article>
+
+  <div class="info">
+    <% if @schedules.empty? then %>
+      <h2><%= l :nothing_scheduled %></h2>
+    <% end %>
+  </div>
+</div>

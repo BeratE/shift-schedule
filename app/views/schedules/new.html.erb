@@ -1,0 +1,33 @@
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag("schedules", :plugin => "shift_schedule") %>
+<% end %>
+
+<div class="container">
+  <div class="head">
+    <h2 class="title">Add new Version..</h2>
+  </div>
+  <div class="main">
+    <div class="details">
+      <h2> Add a version to .. <%= ": #{@curr_date.strftime("%V")}/#{@curr_date.year}" %> <h2>
+      <%if @versions.empty? then %>
+        <h2>There are no unscheduled Versions aviable..</h2>
+      <% end %>
+    </div>
+    <div style="margin-left: 40px;">
+      <table class="version_table">
+        <tr>
+          <th>Version</th>
+          <th class="side_border">Name</th>
+          <th>of Project</th>
+        </tr>
+        <% @versions.each do |v| %>
+          <tr class="elem" onclick="window.document.location='/schedules/create/?v=<%= v.id %>';">
+            <td><%= v.id %> </td>
+            <td><%= v.name %></td>
+            <td></td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+</div>

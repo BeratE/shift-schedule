@@ -2,10 +2,10 @@
   <tr>
     <th>Name</th>
     <% @versions.each do |v| %>
-      <th><%= " #{v.name} " %></th>
+      <th class="side_border" ><%= " #{v.name} " %></th>
     <% end %>
-    <th>
-      <%= button_to "+Version", action: "new" %>
+    <th class="side_border">
+      <form><a href=/schedules/new><button type="button">+Version</button></a></form>
     </th>
     <th>h/W</th>
   </tr>
@@ -13,7 +13,7 @@
   <tr>
     <td><%= "#{user.firstname} #{user.lastname}" %></td>
     <% @versions.each do |v| %>
-      <th></th>
+      <td></td>
     <% end %>
     <td class="empty"></td>
     <td><%= "#{ava_time(user)}/#{ava_time(user)}" %></td>

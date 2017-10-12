@@ -12,11 +12,6 @@
       <%= render :partial => "navigation" %>
     </div>
     <div class="content">
-      <div class="info">
-        <% if @schedules.empty? then %>
-          <h2><%= l :nothing_scheduled %></h2>
-        <% end %>
-      </div>
 
       <div class="scheduling">
         <%= render :partial => "scheduling" %>

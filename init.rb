@@ -7,7 +7,6 @@ Redmine::Plugin.register :shift_schedule do
   version '0.0.1'
   url 'https://github.com/BeratE/shift-schedule'
 
-  permission :schedules, { :schedules => :index }, :public => true
   menu :top_menu, :schedules, { :controller => 'schedules', :action => 'index' }, :caption => 'Schedule', :if => Proc.new{User.current.logged?}
   settings :default => {'budget_buffer' => 20}, :partial => 'settings/schedule_settings'
 end
