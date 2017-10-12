@@ -12,8 +12,8 @@
   <% @users.each do |user| %>
   <tr>
     <td><%= "#{user.firstname} #{user.lastname}" %></td>
-    <% @versions.each do |v| %>
-      <td></td>
+    <% @versions.each do |version| %>
+      <td><%= @schedules.find_by(user_id: user.id, version_id: version.id).hours %></td>
     <% end %>
     <td class="empty"></td>
     <td><%= "#{ava_time(user)}/#{ava_time(user)}" %></td>
