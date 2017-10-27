@@ -8,7 +8,7 @@ module SchedulesHelper
     versions.each do |v|
       sum = sum + schedhash[[user.id, v.id]]
     end
-    sum
+    return sum
   end
 
   def sum_version_time (version, users, schedhash)
@@ -16,7 +16,7 @@ module SchedulesHelper
     users.each do |u|
       sum = sum + schedhash[[u.id, version.id]]
     end
-    sum
+    return sum
   end
 
   def sum_user_version_time (users, versions, schedhash)

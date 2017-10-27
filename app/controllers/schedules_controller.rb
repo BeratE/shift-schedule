@@ -3,38 +3,36 @@ class SchedulesController < ApplicationController
   before_action :require_login
   unloadable
 
-  #show schedules and navigation
+  #show schedules and navigation and do some initialization
   def index
     @curr_date = Time.new
-    if params[:schedule_date].present? && vali_date(params[:schedule_date].to_time) then
+    if params[:schedule_date].present? && vali_date(params[:schedule_date].to_time)
       @curr_date = params[:schedule_date].to_time
     end
     session[:curr_date] = @curr_date
 
-    #get all schedules and versions for the selected week
-    @schedules = Schedule.where(year: @curr_date.year, week: @curr_date.strftime("%V").to_i)
-    @versions = Version.joins("JOIN schedules ON schedules.version_id = versions.id
-    WHERE schedules.year = #{@curr_date.year} AND schedules.week = #{@curr_date.strftime("%V").to_i}").distinct
+    @schedules = get_schedules_current
+    @versions = get_versions_current
     @users = get_users
 
-    #sort all schedules in a 2d hash with [[user.id, version.id]] = hours, if any user is not assigned, new schedules will be created
-    @schedhash = Hash.new
+    @schedhash = Hash.new # all schedules stored in a 2d hash [[user.id, version.id]] = hours, for ease of use
+
+    #sort all schedules in 2d hash if any user is not assigned, new schedules will be created
     @versions.each do |version|
       @users.each do |user|
         schedule = @schedules.find_by(user_id: user.id, version_id: version.id)
-        if (schedule.nil?) then #create new schedules
+        unless (schedule.nil?)
+          @schedhash[[user.id, version.id]] = schedule.hours
+        else #create new schedules
           @versions.each do |v|
             Schedule.create(:year => @curr_date.year.to_i, :week => @curr_date.strftime("%V").to_i,
             :user_id => user.id, :version_id => v.id, :hours => 0)
             @schedhash[[user.id, v.id]] = 0
           end
-        else
-          @schedhash[[user.id, version.id]] = schedule.hours
         end
       end
     end
   end
-
 
   #show all versions who havent been added to the selected week for scheduling
   def new
@@ -46,11 +44,10 @@ class SchedulesController < ApplicationController
     ON versions.id = s.version_id WHERE s.id is NULL")
   end
 
-
   #create new schedules with selected version for the week
   def create
-    if ((0..4294967295).include?(params[:v].to_i)) then
-      @users = User.where(type: "User")
+    if ((params[:v].to_i).is_a? Integer)
+      @users = User.where(type: "User") # all users so users with unconfigured budget have a schedule
       @users.each do |u|
         Schedule.create(:year => session[:curr_date].year.to_i, :week => session[:curr_date].strftime("%V").to_i,
         :user_id => u.id, :version_id => params[:v].to_i, :hours => 0)
@@ -60,17 +57,17 @@ class SchedulesController < ApplicationController
     redirect_to controller: 'schedules', action: 'index', schedule_date: session[:curr_date].strftime('%Y %m %d').gsub!(' ','-')
   end
 
-
   #change hours of all edited schedules
   def edit
     @curr_date = session[:curr_date]
     @users = get_users
-    @schedules = Schedule.where(year: @curr_date.year, week: @curr_date.strftime("%V").to_i)
-    @versions = Version.joins("JOIN schedules ON schedules.version_id = versions.id
-    WHERE schedules.year = #{@curr_date.year} AND schedules.week = #{@curr_date.strftime("%V").to_i}").distinct
+    @schedules = get_schedules_current
+    @versions = get_versions_current
 
     @users.each do |u|
       @versions.each do |v|
+        unless ((params["#{u.id}|#{v.id}"].to_i).is_a Integer) then next end
+
         sched = @schedules.find_by(user_id: u.id, version_id: v.id)
         sched.hours = params["#{u.id}|#{v.id}"].to_i
         sched.save
@@ -80,12 +77,20 @@ class SchedulesController < ApplicationController
     redirect_to controller: 'schedules', action: 'index', schedule_date: session[:curr_date].strftime('%Y %m %d').gsub!(' ','-')
   end
 
-
 private
+  #checks if the user is logged in and configures the time unless already set
   def require_login
     unless User.current.logged?
       redirect_to "/"
     end
+    unless session[:curr_date]
+      session[:curr_date] = Time.new
+    end
+  end
+
+  #validate the given date parameters
+  def vali_date (date)
+    return ((0..9999).include?(date.year) && (0..52).include?(date.strftime("%V").to_i))
   end
 
   #get all users that have a budget (shift_hours) configured
@@ -95,9 +100,14 @@ private
     AND user_preferences.shift_hours > 0").select(:id, :type, :firstname, :lastname, :shift_hours)
   end
 
+  #get all schedules for the current week
+  def get_schedules_current
+    Schedule.where(year: session[:curr_date].year, week: session[:curr_date].strftime("%V").to_i)
+  end
 
-  #validate the given date parameters
-  def vali_date (date)
-    return ((0..9999).include?(date.year) && (0..52).include?(date.strftime("%V").to_i))
+  #get all disctinct versions scheduled for the current week
+  def get_versions_current
+    Version.joins("JOIN schedules ON schedules.version_id = versions.id
+    WHERE schedules.year = #{session[:curr_date].year} AND schedules.week = #{session[:curr_date].strftime("%V").to_i}").distinct
   end
 end

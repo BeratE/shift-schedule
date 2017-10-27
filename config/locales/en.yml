@@ -1,9 +1,11 @@
 # English strings go here for Rails i18n
 en:
    shift_schedule_title: "Shift Schedule"
-   shift_schedule_settings_title: "Global Schedule Buffer"
-   current_week_title: "Selected Week"
+   shift_schedule_settings_title: "Global schedule buffer"
+   current_week_title: "Selected week"
+   add_new_title: "Add new version"
 
-   nothing_scheduled: "Nothing scheduled for this Week."
+   nothing_scheduled: "Nothing scheduled for this week."
+   no_unsched_versions: "There are no unscheduled versions for this week."
 
    field_shift_hours: "Weekly shift hours"

@@ -4,30 +4,31 @@
 
 <div class="container">
   <div class="head">
-    <h2 class="title">Add new Version..</h2>
+    <h2 class="title"><%= l :add_new_title %>: <%= ": #{@curr_date.strftime("%V")}/#{@curr_date.year}" %></h2>
   </div>
   <div class="main">
     <div class="details">
-      <h2> Add a version to .. <%= ": #{@curr_date.strftime("%V")}/#{@curr_date.year}" %> <h2>
-      <%if @versions.empty? then %>
-        <h2>There are no unscheduled Versions aviable..</h2>
+      <% if @versions.empty? %>
+        <h2><%= l :no_unsched_versions %></h2>
       <% end %>
     </div>
-    <div style="margin-left: 40px;">
-      <table class="version_table">
-        <tr>
-          <th>Version</th>
-          <th class="side_border">Name</th>
-          <th>of Project</th>
-        </tr>
-        <% @versions.each do |v| %>
-          <tr class="elem" onclick="window.document.location='/schedules/create/?v=<%= v.id %>';">
-            <td><%= v.id %> </td>
-            <td><%= v.name %></td>
-            <td><%= v.pname %></td>
+    <% unless @versions.empty? %>
+      <div style="margin-left: 40px;">
+        <table class="version_table">
+          <tr>
+            <th>Version</th>
+            <th class="side_border">Name</th>
+            <th>of Project</th>
           </tr>
-        <% end %>
-      </table>
-    </div>
+          <% @versions.each do |v| %>
+            <tr class="elem" onclick="window.document.location='/schedules/create/?v=<%= v.id %>';">
+              <td><%= v.id %> </td>
+              <td><%= v.name %></td>
+              <td><%= v.pname %></td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    <% end %>
   </div>
 </div>

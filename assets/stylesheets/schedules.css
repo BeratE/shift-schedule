@@ -1,3 +1,14 @@
+/*HTML Elements*/
+a.button {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+
+    text-decoration: none;
+    color: initial;
+}
+
+/*Base Layout*/
 .container{
 
 }
@@ -36,6 +47,7 @@
   font-size: 16px;
 }
 
+/*Schedule Layout specific*/
 .schedule {
   margin-top: 40px;
   padding: 10px;
@@ -64,6 +76,7 @@
   border-right: 1px solid;
 }
 
+/*New Version Layout specific*/
 .version_table {
   border-collapse: collapse;
   padding: 15px;
@@ -85,13 +98,4 @@
 
 .version_table .elem:hover {
   background-color: gainsboro;
-}
-
-a.button {
-    -webkit-appearance: button;
-    -moz-appearance: button;
-    appearance: button;
-
-    text-decoration: none;
-    color: initial;
 }
