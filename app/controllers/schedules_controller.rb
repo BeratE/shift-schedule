@@ -66,8 +66,6 @@ class SchedulesController < ApplicationController
 
     @users.each do |u|
       @versions.each do |v|
-        unless ((params["#{u.id}|#{v.id}"].to_i).is_a Integer) then next end
-
         sched = @schedules.find_by(user_id: u.id, version_id: v.id)
         sched.hours = params["#{u.id}|#{v.id}"].to_i
         sched.save
