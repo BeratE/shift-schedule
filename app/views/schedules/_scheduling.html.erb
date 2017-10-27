@@ -11,6 +11,7 @@
     </th>
     <th>h/W</th>
   </tr>
+
   <% @users.each do |user| %>
   <tr>
     <td><%= "#{user.firstname} #{user.lastname}" %></td>
@@ -19,9 +20,19 @@
                  name="<%="#{user.id}|#{version.id}"%>" type="number" value="<%= @schedhash[[user.id, version.id]] %>"/></td>
     <% end %>
     <td class="empty"></td>
-    <td><%= "#{sum_time(user, @versions, @schedhash)}/#{ava_time(user)}" %></td>
+    <td><%= "#{sum_user_time(user, @versions, @schedhash)} / #{ava_time(user)}" %></td>
   </tr>
   <% end %>
+
+  <tr>
+    <td>Sum</td>
+    <% @versions.each do |version| %>
+      <td> <%= "#{sum_version_time(version, @users, @schedhash)}" %> </td>
+    <% end %>
+    <td class="empty"></td>
+    <td><%= sum_user_version_time(@users, @versions, @schedhash) %></td>
+  </tr>
+
 </table>
 
 <%= submit_tag("Edit") %>

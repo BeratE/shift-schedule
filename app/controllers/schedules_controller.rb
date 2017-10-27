@@ -1,5 +1,6 @@
 require 'date'
 class SchedulesController < ApplicationController
+  before_action :require_login
   unloadable
 
   #show schedules and navigation
@@ -80,6 +81,12 @@ class SchedulesController < ApplicationController
 
 
 private
+  def require_login
+    unless User.current.logged?
+      redirect_to "/"
+    end
+  end
+
   #get all users that have a budget (shift_hours) configured
   def get_users
     User.joins("INNER JOIN user_preferences
