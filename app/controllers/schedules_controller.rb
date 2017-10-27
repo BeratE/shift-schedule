@@ -39,8 +39,9 @@ class SchedulesController < ApplicationController
   #show all versions who havent been added to the selected week for scheduling
   def new
     @curr_date = session[:curr_date]
-    @versions = Version.find_by_sql("SELECT versions.id, versions.name
-    FROM versions LEFT OUTER JOIN (SELECT * FROM schedules
+    @versions = Version.find_by_sql("SELECT versions.id, versions.name, projects.name AS pname
+    FROM versions JOIN projects ON versions.project_id = projects.id
+    LEFT OUTER JOIN (SELECT * FROM schedules
     WHERE schedules.year = #{@curr_date.year} AND schedules.week = #{@curr_date.strftime("%V").to_i}) s
     ON versions.id = s.version_id WHERE s.id is NULL")
   end
