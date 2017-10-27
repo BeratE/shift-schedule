@@ -61,7 +61,21 @@ class SchedulesController < ApplicationController
 
   #change hours of all edited schedules
   def edit
+    @curr_date = session[:curr_date]
+    @users = get_users
+    @schedules = Schedule.where(year: @curr_date.year, week: @curr_date.strftime("%V").to_i)
+    @versions = Version.joins("JOIN schedules ON schedules.version_id = versions.id
+    WHERE schedules.year = #{@curr_date.year} AND schedules.week = #{@curr_date.strftime("%V").to_i}").distinct
 
+    @users.each do |u|
+      @versions.each do |v|
+        sched = @schedules.find_by(user_id: u.id, version_id: v.id)
+        sched.hours = params["#{u.id}|#{v.id}"].to_i
+        sched.save
+      end
+    end
+
+    redirect_to controller: 'schedules', action: 'index', schedule_date: session[:curr_date].strftime('%Y %m %d').gsub!(' ','-')
   end
 
 
