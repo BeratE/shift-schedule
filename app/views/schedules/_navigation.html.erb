@@ -19,7 +19,7 @@
   <%= ": #{Setting.plugin_shift_schedule['buffer']}%" %>
 
   <div class="info">
-    <% if @schedules.empty? then %>
+    <% if @schedhash.empty? then %>
       <h2><%= l :nothing_scheduled %></h2>
     <% end %>
   </div>
