@@ -44,16 +44,23 @@ class SchedulesController < ApplicationController
     ON versions.id = s.version_id WHERE s.id is NULL")
   end
 
-  #create new schedules with selected version for the week
+  #create new schedules of current week for selected version
   def create
-    if ((params[:v].to_i).is_a? Integer)
+    if ((params[:v_id].to_i).is_a? Integer)
       @users = User.where(type: "User") # all users so users with unconfigured budget have a schedule
       @users.each do |u|
         Schedule.create(:year => session[:curr_date].year.to_i, :week => session[:curr_date].strftime("%V").to_i,
-        :user_id => u.id, :version_id => params[:v].to_i, :hours => 0)
+        :user_id => u.id, :version_id => params[:v_id].to_i, :hours => 0)
       end
     end
+    redirect_to controller: 'schedules', action: 'index', schedule_date: session[:curr_date].strftime('%Y %m %d').gsub!(' ','-')
+  end
 
+  #delete all schedules of current week for the selected version
+  def delete
+    if ((params[:v].to_i).is_a? Integer)
+
+    end
     redirect_to controller: 'schedules', action: 'index', schedule_date: session[:curr_date].strftime('%Y %m %d').gsub!(' ','-')
   end
 
@@ -105,7 +112,8 @@ private
 
   #get all disctinct versions scheduled for the current week
   def get_versions_current
-    Version.joins("JOIN schedules ON schedules.version_id = versions.id
-    WHERE schedules.year = #{session[:curr_date].year} AND schedules.week = #{session[:curr_date].strftime("%V").to_i}").distinct
+    Version.find_by_sql("SELECT DISTINCT versions.id, versions.name, projects.name AS pname
+    FROM versions JOIN schedules ON schedules.version_id = versions.id JOIN projects ON versions.project_id = projects.id
+    WHERE schedules.year = #{session[:curr_date].year} AND schedules.week = #{session[:curr_date].strftime("%V").to_i}")
   end
 end

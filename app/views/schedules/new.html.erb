@@ -1,5 +1,6 @@
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag("schedules", :plugin => "shift_schedule") %>
+  <%= javascript_include_tag("script", :plugin => "shift_schedule") %>
 <% end %>
 
 <div class="container">
@@ -14,20 +15,23 @@
     </div>
     <% unless @versions.empty? %>
       <div style="margin-left: 40px;">
-        <table class="version_table">
-          <tr>
-            <th>Version</th>
-            <th class="side_border">Name</th>
-            <th>of Project</th>
-          </tr>
-          <% @versions.each do |v| %>
-            <tr class="elem" onclick="window.document.location='/schedules/create/?v=<%= v.id %>';">
-              <td><%= v.id %> </td>
-              <td><%= v.name %></td>
-              <td><%= v.pname %></td>
+        <%= form_tag "/schedules/create", method: "post", :id => 'f_new' do %>
+          <input id="v_id" name="v_id" type="hidden" value="0"/>
+          <table class="version_table">
+            <tr>
+              <th>Version</th>
+              <th class="side_border">Name</th>
+              <th>of Project</th>
             </tr>
-          <% end %>
-        </table>
+            <% @versions.each do |v| %>
+              <tr class="row" onclick="rowSelect(<%=(v.id).to_i%>)">
+                <td><%= v.id %> </td>
+                <td><%= v.name %></td>
+                <td><%= v.pname %></td>
+              </tr>
+            <% end %>
+          </table>
+        <% end %>
       </div>
     <% end %>
 

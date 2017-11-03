@@ -96,6 +96,7 @@ a.button {
   padding-left: 5px;
 }
 
-.version_table .elem:hover {
+.version_table .row:hover {
   background-color: gainsboro;
+  cursor:pointer;
 }

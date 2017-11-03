@@ -1,10 +1,10 @@
-<%= form_tag("/schedules/edit", method: "post") do %>
+<%= form_tag "/schedules/edit", method: "post" do %>
   <table class="schedule">
     <tr>
       <th><%= "#{@curr_date.strftime("%V")}/#{@curr_date.year}" %></th>
 
       <% @versions.each do |version| %>
-        <th class="side_border" ><%= " #{version.name} " %></th>
+        <th class="side_border" ><%= " #{version.name} "%></br><small><%= " #{version.pname} " %></small></th>
       <% end %>
 
       <th class="side_border">
