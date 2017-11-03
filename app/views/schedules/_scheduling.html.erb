@@ -1,26 +1,26 @@
 <%= form_tag("/schedules/edit", method: "post") do %>
   <table class="schedule">
     <tr>
-      <th>Name</th>
+      <th><%= "#{@curr_date.strftime("%V")}/#{@curr_date.year}" %></th>
+
       <% @versions.each do |version| %>
         <th class="side_border" ><%= " #{version.name} " %></th>
       <% end %>
+
       <th class="side_border">
         <a href="/schedules/new" class="button">+Version</a>
       </th>
-      <th>h/W</th>
     </tr>
 
     <% @users.each do |user| %>
       <tr>
-        <td><%= "#{user.firstname} #{user.lastname}" %></td>
+        <td <% if (user.id == User.current.id) then %>style="background-color: Lavender;"<% end %>><%= "#{user.firstname} #{user.lastname}" %></td>
         <% @versions.each do |version| %>
           <td>
             <input id="<%="#{user.id}|#{version.id}"%>" max="<%= ava_time(user) %>" min="0"
                    name="<%="#{user.id}|#{version.id}"%>" type="number" value="<%= @schedhash[[user.id, version.id]] %>"/>
           </td>
         <% end %>
-        <td class="empty"></td>
         <td <% if (ava_time(user) < sum_user_time(user, @versions, @schedhash)) then %>style="background-color: red;"<%end%>>>
           <%= "#{sum_user_time(user, @versions, @schedhash)} / #{ava_time(user)}" %>
         </td>
@@ -28,11 +28,10 @@
     <% end %>
 
     <tr>
-      <td>Sum</td>
+      <td style="text-align: center; font-size: 18px;">&Sigma;</td>
       <% @versions.each do |version| %>
         <td> <%= "#{sum_version_time(version, @users, @schedhash)}" %> </td>
       <% end %>
-      <td class="empty"></td>
       <td><%= sum_user_version_time(@users, @versions, @schedhash) %></td>
     </tr>
   </table>

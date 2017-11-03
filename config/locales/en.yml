@@ -9,3 +9,5 @@ en:
    no_unsched_versions: "There are no unscheduled versions for this week."
 
    field_shift_hours: "Weekly shift hours"
+
+   back: "Back"
