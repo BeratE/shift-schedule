@@ -4,7 +4,11 @@
       <th><%= "#{@curr_date.strftime("%V")}/#{@curr_date.year}" %></th>
 
       <% @versions.each do |version| %>
-        <th class="side_border" ><%= " #{version.name} "%></br><small><%= " #{version.pname} " %></small></th>
+        <th class="side_border" >
+          <%= version.name %>
+          <button type="button" onclick="versionSelect(<%=(version.id).to_i%>)">-</button> </br>
+          <small><%= version.pname %></small>
+        </th>
       <% end %>
 
       <th class="side_border">
@@ -36,4 +40,8 @@
     </tr>
   </table>
 <%= submit_tag("Edit") %>
+<% end %>
+
+<%= form_tag "/schedules/delete", method: "post", :id => 'version_form' do %>
+  <input id="v_id" name="v_id" type="hidden" value="0"/>
 <% end %>

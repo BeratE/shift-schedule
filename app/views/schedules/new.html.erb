@@ -15,8 +15,6 @@
     </div>
     <% unless @versions.empty? %>
       <div style="margin-left: 40px;">
-        <%= form_tag "/schedules/create", method: "post", :id => 'f_new' do %>
-          <input id="v_id" name="v_id" type="hidden" value="0"/>
           <table class="version_table">
             <tr>
               <th>Version</th>
@@ -24,17 +22,20 @@
               <th>of Project</th>
             </tr>
             <% @versions.each do |v| %>
-              <tr class="row" onclick="rowSelect(<%=(v.id).to_i%>)">
+              <tr class="row" onclick="versionSelect(<%=(v.id).to_i%>)">
                 <td><%= v.id %> </td>
                 <td><%= v.name %></td>
                 <td><%= v.pname %></td>
               </tr>
             <% end %>
           </table>
-        <% end %>
       </div>
     <% end %>
 
     <a href="/schedules" class="button"><%= l :back %></a>
   </div>
 </div>
+
+<%= form_tag "/schedules/create", method: "post", :id => 'version_form' do %>
+  <input id="v_id" name="v_id" type="hidden" value="0"/>
+<% end %>

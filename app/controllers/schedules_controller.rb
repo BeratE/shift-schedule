@@ -58,8 +58,9 @@ class SchedulesController < ApplicationController
 
   #delete all schedules of current week for the selected version
   def delete
-    if ((params[:v].to_i).is_a? Integer)
-
+    if ((params[:v_id].to_i).is_a? Integer)
+      Schedule.where(:year => session[:curr_date].year.to_i, :week => session[:curr_date].strftime("%V").to_i,
+      :version_id => params[:v_id].to_i).destroy_all
     end
     redirect_to controller: 'schedules', action: 'index', schedule_date: session[:curr_date].strftime('%Y %m %d').gsub!(' ','-')
   end
