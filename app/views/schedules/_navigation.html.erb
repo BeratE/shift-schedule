@@ -1,26 +1,30 @@
 <h3>
-  <%= l :current_week_title %>
+  <%= l :title_current_week %>
   <%= ": #{@curr_date.strftime("%V")}/#{@curr_date.year}" %>
 </h3>
 
 <div class="date">
-  <%= form_tag("/schedules", method: "get") do %>
+  <%= form_tag "/schedules/view", method: "get", :id => 'date_form' do %>
     <input id="schedule_date" name="schedule_date" type="text" size="10"
-      value="<%= "#{format_time @curr_date}" %>" readonly />
-    <script>
-      $(function() { $('#schedule_date').addClass('date').datepicker(datepickerOptions); });
-    </script>
-    <%= submit_tag("Ok") %>
+    value="<%= "#{format_time @curr_date}" %>" onchange="document.getElementById('date_form').submit();" readonly />
   <% end %>
 </div>
 
 <div class="details">
-  <%= l :shift_schedule_settings_title %>
+  <%= l :title_shift_schedule_settings %>
   <%= ": #{Setting.plugin_shift_schedule['buffer']}%" %>
-
-  <div class="info">
-    <% if @schedhash.empty? then %>
-      <h2><%= l :nothing_scheduled %></h2>
-    <% end %>
-  </div>
+  <br>
+  <% if @schedhash.empty? then %>
+    <%= l :i_nothing_scheduled %>
+  <% else %>
+    <br>
+  <% end %>
 </div>
+
+<div>
+  <a href="/schedules/sel_pr" class="button"><%= l :lbl_select_project %></a>
+</div>
+
+<script>
+  $(function() { $('#schedule_date').addClass('date').datepicker(datepickerOptions); });
+</script>

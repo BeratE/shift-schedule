@@ -1,13 +1,22 @@
 # German strings go here for Rails i18n
 de:
-   shift_schedule_title: "Arbeitszeiten Planer"
-   shift_schedule_settings_title: "Globaler Zeitplan Puffer"
-   current_week_title: "Ausgewählte Woche"
-   add_new_title: "Neue Version hinzufügen"
+   #configurations
+   permission_view_schedules: "Planung sehen"
+   permission_edit_schedules: "Planung bearbeiten"
 
-   nothing_scheduled: "Für diese Woche ist nichts geplant."
-   no_unsched_versions: "Es existieren keine ungeplanten Versionen für diese Woche."
+   #informational text
+   i_nothing_scheduled: "Für diese Woche ist nichts geplant."
+   i_no_unsched_versions: "Es existieren keine ungeplanten Versionen für diese Woche."
+   i_no_projects: "Sie haben keine Projekte an der sie derzeit arbeiten."
 
-   field_shift_hours: "Wöchentliche Arbeitszeiten"
+   #title
+   title_shift_schedule: "Arbeitszeiten Planer"
+   title_shift_schedule_settings: "Globaler Zeitplan Puffer"
+   title_current_week: "Ausgewählte Woche"
+   title_add_new: "Neue Version hinzufügen"
 
-   back: "Zurück"
+   #label
+   lbl_select_project: "Projekt auswählen"
+   lbl_shift_hours: "Wöchentliche Arbeitszeiten"
+   lbl_project: "Projekt"
+   lbl_back: "Zurück"

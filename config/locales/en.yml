@@ -1,13 +1,22 @@
 # English strings go here for Rails i18n
 en:
-   shift_schedule_title: "Shift Schedule"
-   shift_schedule_settings_title: "Global schedule buffer"
-   current_week_title: "Selected week"
-   add_new_title: "Add new version"
+   #configurations
+   permission_view_schedules: "View schedules"
+   permission_edit_schedules: "Edit schedules"
 
-   nothing_scheduled: "Nothing scheduled for this week."
-   no_unsched_versions: "There are no unscheduled versions for this week."
+   #informational text
+   i_nothing_scheduled: "Nothing scheduled for this week."
+   i_no_unsched_versions: "There are no unscheduled versions for this week."
+   i_no_projects: "You currently aren't assigned to any project."
 
-   field_shift_hours: "Weekly shift hours"
+   #title
+   title_shift_schedule: "Shift Schedule"
+   title_shift_schedule_settings: "Global schedule buffer"
+   title_current_week: "Selected week"
+   title_add_new: "Add new version"
 
-   back: "Back"
+   #label
+   lbl_select_project: "Select Project"
+   lbl_shift_hours: "Weekly shift hours"
+   lbl_project: "Project"
+   lbl_back: "Back"

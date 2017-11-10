@@ -1,36 +1,42 @@
 <%= form_tag "/schedules/edit", method: "post" do %>
-  <table class="schedule">
+  <table class="schedule_table">
     <tr>
       <th><%= "#{@curr_date.strftime("%V")}/#{@curr_date.year}" %></th>
-
       <% @versions.each do |version| %>
         <th class="side_border" >
           <%= version.name %>
-          <button type="button" onclick="versionSelect(<%=(version.id).to_i%>)">-</button> </br>
-          <small><%= version.pname %></small>
+          <% if User.current.allowed_to?(:edit_schedules, @project) %>
+            <button type="button" onclick="idSelect(<%=(version.id).to_i%>, true)">-</button>
+          <% end %>
+          </br><small><%= version.pname %></small>
         </th>
       <% end %>
-
       <th class="side_border">
-        <a href="/schedules/new" class="button">+Version</a>
+        <% if User.current.allowed_to?(:edit_schedules, @project) %>
+          <a href="/schedules/new" class="button">+Version</a>
+        <% end %>
       </th>
     </tr>
-
     <% @users.each do |user| %>
       <tr>
-        <td <% if (user.id == User.current.id) then %>style="background-color: Lavender;"<% end %>><%= "#{user.firstname} #{user.lastname}" %></td>
+        <td <% if (user.id == User.current.id) %> style="background-color: Lavender;" <% end %>>
+          <%= "#{user.firstname} #{user.lastname}" %>
+        </td>
         <% @versions.each do |version| %>
           <td>
-            <input id="<%="#{user.id}|#{version.id}"%>" max="<%= ava_time(user) %>" min="0"
-                   name="<%="#{user.id}|#{version.id}"%>" type="number" value="<%= @schedhash[[user.id, version.id]] %>"/>
+            <% if User.current.allowed_to?(:edit_schedules, @project) %>
+              <input id="<%="#{user.id}|#{version.id}"%>" max="<%= ava_time(user) %>" min="0"
+                name="<%="#{user.id}|#{version.id}"%>" type="number" value="<%= @schedhash[[user.id, version.id]] %>"/>
+            <% else %>
+              <%= @schedhash[[user.id, version.id]] %>
+            <% end %>
           </td>
         <% end %>
-        <td <% if (ava_time(user) < sum_user_time(user, @versions, @schedhash)) then %>style="background-color: red;"<%end%>>>
+        <td <% if (ava_time(user) < sum_user_time(user, @versions, @schedhash)) %> style="background-color: #ba0022;" <%end%>>
           <%= "#{sum_user_time(user, @versions, @schedhash)} / #{ava_time(user)}" %>
         </td>
       </tr>
     <% end %>
-
     <tr>
       <td style="text-align: center; font-size: 18px;">&Sigma;</td>
       <% @versions.each do |version| %>
@@ -39,9 +45,11 @@
       <td><%= sum_user_version_time(@users, @versions, @schedhash) %></td>
     </tr>
   </table>
-<%= submit_tag("Edit") %>
+<% if User.current.allowed_to?(:edit_schedules, @project) %>
+  <%= submit_tag("Save") %>
+<% end %>
 <% end %>
 
-<%= form_tag "/schedules/delete", method: "post", :id => 'version_form' do %>
-  <input id="v_id" name="v_id" type="hidden" value="0"/>
+<%= form_tag "/schedules/delete", method: "post", :id => 'id_form' do %>
+  <input id="_id" name="_id" type="hidden" value="0"/>
 <% end %>

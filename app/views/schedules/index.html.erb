@@ -5,16 +5,31 @@
 
 <div class="container">
   <div class="head">
-    <h2 class="title"><%= l :shift_schedule_title %></h2>
+    <h2 class="title"><%= l :title_shift_schedule %></h2>
+    <% if @projects.empty? %>
+      <h2><%= l :i_no_projects %></h2>
+    <% end %>
+    <h3><%= l :lbl_select_project %><h3>
   </div>
   <div class="main">
-    <div class="nav">
-      <%= render :partial => "navigation" %>
-    </div>
-    <div class="content">
-      <div class="scheduling">
-        <%= render :partial => "scheduling" %>
-      </div>
-    </div>
+    <% unless @projects.empty? %>
+      <table class="select_table">
+        <tr>
+          <th></th>
+        </tr>
+        <% @projects.each do |pr| %>
+          <tr class="row" onclick="idSelect(<%=(pr.id).to_i%>, false)">
+            <td>
+              <b><%= pr.name %></b> <br>
+              <small><pre>    <%= pr.description %></pre></small>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    <% end %>
   </div>
 </div>
+
+<%= form_tag "/schedules/view", method: "post", :id => 'id_form' do %>
+  <input id="_id" name="_id" type="hidden" value="0"/>
+<% end %>

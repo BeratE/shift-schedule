@@ -1,16 +1,15 @@
 /*HTML Elements*/
 a.button {
-    -webkit-appearance: button;
-    -moz-appearance: button;
-    appearance: button;
-
-    text-decoration: none;
-    color: initial;
+  font-size: 14px;
+  text-decoration: none;
+  color: initial;
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
 }
 
-/*Base Layout*/
+/*base layout*/
 .container{
-
 }
 
 .head {
@@ -25,20 +24,16 @@ a.button {
 
 .nav {
   float: left;
-  max-width: 20%;
-  border-right: 1px solid grey;
+  width: 310px;
   margin: 0px;
+  border-right: 1px solid grey;
   padding: 1em;
 }
 
 .details {
+  margin: 30px 0px 30px 10px;
+  border: 1px inset;
   font-size: 16px;
-  margin-top: 30px;
-  margin-bottom: 50px;
-}
-
-.info {
-  padding: 5px;
 }
 
 .content {
@@ -47,56 +42,58 @@ a.button {
   font-size: 16px;
 }
 
-/*Schedule Layout specific*/
-.schedule {
-  margin-top: 40px;
-  padding: 10px;
+.side_border {
+  border-right: 1px solid;
+  border-left: 1px solid;
+}
+
+/*schedule layout specific*/
+.schedule_table {
+  margin: 40px 0px 20px 20px;
   border-collapse: collapse;
-}
-
-.schedule tr th {
-  border-bottom: 1px solid;
-  padding-bottom: 5px;
-  min-width: 100px;
-}
-
-.schedule tr td {
   padding: 10px;
+}
+
+.schedule_table tr th {
+  min-width: 100px;
+  border-bottom: 1px solid;
+  padding: 5px;
+}
+
+.schedule_table tr td {
   border: 1px solid #ddd;
   border-bottom: 1px solid;
+  padding: 10px;
   text-align: left;
 }
 
-.schedule tr .empty {
+.schedule_table tr .empty {
   background-color: gainsboro ;
 }
 
-.side_border {
-  border-left: 1px solid;
-  border-right: 1px solid;
-}
-
-/*New Version Layout specific*/
-.version_table {
-  border-collapse: collapse;
+/*selection table layout specific*/
+.select_table {
   padding: 15px;
+  border-collapse: collapse;
   font-size: 18px;
 }
 
-.version_table tr {
+.select_table tr {
 }
 
-.version_table tr th {
-  border-bottom: 1px solid;
+.select_table tr th {
   padding: 10px;
+  border-bottom: 1px solid;
 }
 
-.version_table tr td {
-  border-top: 1px solid gray;
+.select_table tr td {
   padding-left: 5px;
+  color: #3773d3;
+  border-top: 2px dashed #ced5e0;
+  border-bottom: 2px dashed #ced5e0;
 }
 
-.version_table .row:hover {
-  background-color: gainsboro;
+.select_table .row:hover {
   cursor:pointer;
+  background-color: gainsboro;
 }
