@@ -1,6 +1,6 @@
 module SchedulesHelper
   def ava_time (user)
-    return (user.shift_hours.to_i * (1 - (Setting.plugin_shift_schedule['buffer'].to_i / 100.0))).to_i
+    return (user.shift_hours * (1 - (Setting.plugin_shift_schedule['buffer'].to_i / 100.0)))
   end
 
   def sum_user_time (user, versions, schedhash)
@@ -34,5 +34,9 @@ module SchedulesHelper
 
   def format_time (date)
     return date.strftime('%Y %m %d').gsub!(' ','-')
+  end
+
+  def has_permission?(project)
+    User.current.allowed_to?(:view_schedules, project) || User.current.allowed_to?(:edit_schedules, project)
   end
 end

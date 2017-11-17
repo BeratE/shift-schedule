@@ -25,8 +25,8 @@
         <% @versions.each do |version| %>
           <td>
             <% if User.current.allowed_to?(:edit_schedules, @project) %>
-              <input id="<%="#{user.id}|#{version.id}"%>" max="<%= ava_time(user) %>" min="0"
-                name="<%="#{user.id}|#{version.id}"%>" type="number" value="<%= @schedhash[[user.id, version.id]] %>"/>
+              <input id="<%="#{user.id}|#{version.id}"%>" name="<%="#{user.id}|#{version.id}"%>"
+              size = "6" type="text" value="<%= @schedhash[[user.id, version.id]] %>"/>
             <% else %>
               <%= @schedhash[[user.id, version.id]] %>
             <% end %>

@@ -1,8 +1,8 @@
 <fieldset class="box">
-  <legend><%=l(:shift_schedule_title)%></legend>
+  <legend><%=l(:title_shift_schedule)%></legend>
   <div class="tabular">
     <%= labelled_fields_for :pref, @user.pref do |pref_fields| %>
-        <p><%= pref_fields.number_field :shift_hours, in: 0..100%></p>
+        <p><%= pref_fields.number_field :shift_hours, in: 0.0..100.0%></p>
     <% end %>
   </div>
 </fieldset>

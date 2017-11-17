@@ -8,8 +8,9 @@
     <h2 class="title"><%= l :title_shift_schedule %></h2>
     <% if @projects.empty? %>
       <h2><%= l :i_no_projects %></h2>
+    <% else %>
+      <h3><%= l :lbl_select_project %><h3>
     <% end %>
-    <h3><%= l :lbl_select_project %><h3>
   </div>
   <div class="main">
     <% unless @projects.empty? %>
@@ -18,12 +19,14 @@
           <th></th>
         </tr>
         <% @projects.each do |pr| %>
-          <tr class="row" onclick="idSelect(<%=(pr.id).to_i%>, false)">
-            <td>
-              <b><%= pr.name %></b> <br>
-              <small><pre>    <%= pr.description %></pre></small>
-            </td>
-          </tr>
+          <% if (has_permission?(pr)) then %>
+            <tr class="row" onclick="idSelect(<%=(pr.id).to_i%>, false)">
+              <td>
+                <b><%= pr.name %></b> <br>
+                <small><pre>    <%= pr.description %></pre></small>
+              </td>
+            </tr>
+          <% end %>
         <% end %>
       </table>
     <% end %>

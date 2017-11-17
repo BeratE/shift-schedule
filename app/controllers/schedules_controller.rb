@@ -5,15 +5,27 @@ class SchedulesController < ApplicationController
 
   #list projects current user is involved in
   def index
+    #if a project had been selected before and user has permissions, redirect to view
+    @project = nil
     if session[:project_id]
-      @project = Project.find(session[:project_id])
-      redirect_to controller: 'schedules', action: 'view'
+      pr = Project.find(session[:project_id])
+      if (user_has_permission?(User.current, pr))
+        @project = pr;
+        redirect_to controller: 'schedules', action: 'view'
+      else
+        session.delete(:project_id)
+      end
     end
 
-    @projects = Project.find_by_sql("SELECT projects.id, projects.name, projects.description
+    #select all projects that have versions and where the user is involved
+    @projects = Project.find_by_sql("SELECT projects.*
       FROM projects JOIN members ON members.project_id = projects.id
       JOIN users ON members.user_id = users.id
-      WHERE users.id = #{User.current.id}")
+      WHERE users.id = #{User.current.id} AND
+      EXISTS (SELECT versions.project_id FROM versions WHERE versions.status = 'open' AND projects.id = versions.project_id)
+      ORDER BY projects.created_on DESC").reject{ |j|
+        !user_has_permission?(User.current, j)
+      }
   end
 
   def sel_pr
@@ -29,30 +41,29 @@ class SchedulesController < ApplicationController
     end
     session[:curr_date] = @curr_date
 
-    @schedules = get_schedules_current
-    @versions = get_versions_current
-    @users = get_users_current
-    @schedhash = get_schedhash(@schedules, @users, @versions)
-
     @project = Project.find(session[:project_id])
+
+    @users = get_users_current(@project)
+    @versions = get_versions_current
+    @schedules = get_schedules_current
+    @schedhash = get_schedhash(@schedules, @users, @versions)
   end
 
   #show all versions of selected project who havent been added to the selected week for scheduling
   def new
     @curr_date = session[:curr_date]
-    @versions = Version.find_by_sql("SELECT versions.id, versions.name, pr.name AS pname
+    @versions = Version.find_by_sql("SELECT DISTINCT versions.id, versions.name, pr.name AS pname
     FROM versions JOIN (SELECT * FROM projects WHERE projects.id = #{session[:project_id].to_i}) pr
-    ON versions.project_id = pr.id
-    LEFT OUTER JOIN (SELECT * FROM schedules
+    ON versions.project_id = pr.id LEFT OUTER JOIN (SELECT * FROM schedules
     WHERE schedules.year = #{@curr_date.year} AND schedules.week = #{@curr_date.strftime("%V").to_i}) s
-    ON versions.id = s.version_id WHERE s.id is NULL")
+    ON versions.id = s.version_id WHERE s.id is NULL AND versions.status = 'open'")
   end
 
-  #create new schedules for of current week for selected version
+  #create new schedules of current week for selected version
   def create
     if ((params[:_id].to_i).is_a? Integer)
-      @users = get_users_current
-      @users.each do |u|
+      users = get_users_current(Project.find(session[:project_id]))
+      users.each do |u|
         Schedule.create(:year => session[:curr_date].year.to_i, :week => session[:curr_date].strftime("%V").to_i,
         :user_id => u.id, :version_id => params[:_id].to_i, :project_id => session[:project_id], :hours => 0)
       end
@@ -71,15 +82,14 @@ class SchedulesController < ApplicationController
 
   #change hours of all edited schedules
   def edit
-    @curr_date = session[:curr_date]
-    @users = get_users_current
-    @versions = get_versions_current
-    @schedules = get_schedules_current
+    versions = get_versions_current
+    schedules = get_schedules_current
+    users = get_users_current(Project.find(session[:project_id]))
 
-    @users.each do |u|
-      @versions.each do |v|
-        sched = @schedules.find_by(user_id: u.id, version_id: v.id)
-        sched.hours = params["#{u.id}|#{v.id}"].to_i
+    users.each do |u|
+      versions.each do |v|
+        sched = schedules.find_by(user_id: u.id, version_id: v.id)
+        sched.hours = params["#{u.id}|#{v.id}"].to_f.abs
         sched.save
       end
     end
@@ -87,11 +97,13 @@ class SchedulesController < ApplicationController
     redirect_to controller: 'schedules', action: 'view', schedule_date: form_date
   end
 
+############################################################################################################################################
+############################################################################################################################################
 private
   #load the project for the purpose of authorizing
   def require_project
-    if (!session[:project_id] && params[:_id])
-      session[:project_id] = params[:_id]
+    if (!session[:project_id] && params[:_id] && ((params[:_id].to_i).is_a? Integer))
+      session[:project_id] = params[:_id].to_i
     end
     @project = Project.find(session[:project_id])
   end
@@ -111,11 +123,23 @@ private
     return ((0..9999).include?(date.year) && (0..52).include?(date.strftime("%V").to_i))
   end
 
+  #checks wether current user is allowed to view or edit the project
+  def user_has_permission?(user, project)
+    user.allowed_to?(:view_schedules, project) || user.allowed_to?(:edit_schedules, project)
+  end
+
+  #formats the date into the fitting paramenter formats
+  def form_date
+    return session[:curr_date].strftime('%Y %m %d').gsub!(' ','-')
+  end
+
   #get all users that are assigned to the project and have a budget (shift_hours) configured
-  def get_users_current
-    User.find_by_sql("SELECT users.id, users.type, users.firstname, users.lastname, up.shift_hours
+  def get_users_current(project)
+    User.find_by_sql("SELECT users.*, up.shift_hours
     FROM users JOIN (SELECT * FROM members WHERE members.project_id = #{session[:project_id].to_i}) m ON m.user_id = users.id
-    INNER JOIN (SELECT * FROM user_preferences WHERE user_preferences.shift_hours > 0) up ON up.user_id = users.id")
+    INNER JOIN (SELECT * FROM user_preferences WHERE user_preferences.shift_hours > 0) up ON up.user_id = users.id").reject{ |u|
+      !user_has_permission?(u, project)
+    }
   end
 
   #get all schedules for the selected project and current week
@@ -128,7 +152,8 @@ private
     Version.find_by_sql("SELECT DISTINCT versions.id, versions.name, pr.name AS pname
     FROM versions JOIN schedules ON schedules.version_id = versions.id
     JOIN (SELECT * FROM projects WHERE projects.id = #{session[:project_id].to_i}) pr ON versions.project_id = pr.id
-    WHERE schedules.year = #{session[:curr_date].year} AND schedules.week = #{session[:curr_date].strftime("%V").to_i}")
+    WHERE schedules.year = #{session[:curr_date].year} AND schedules.week = #{session[:curr_date].strftime("%V").to_i}
+    AND versions.status = 'open'")
   end
 
   #sort all schedules in a 2d hash, if any user is not assigned, new schedules will be created
@@ -150,10 +175,5 @@ private
       end
     end
     return schedhash
-  end
-
-  #formats the date into the fitting paramenter formats
-  def form_date
-    return session[:curr_date].strftime('%Y %m %d').gsub!(' ','-')
   end
 end

@@ -3,8 +3,8 @@ Redmine::Plugin.register :shift_schedule do
 
   name 'Shift Schedule'
   author 'Berat Ertural'
-  description 'Plugin for scheduling the weekly developer shifts on different projects and version.'
-  version '0.3.0'
+  description 'Plugin for scheduling the weekly developer shifts onto different versions of projects.'
+  version '0.1.0'
   url 'https://github.com/BeratE/shift-schedule'
 
   menu :top_menu, :schedules, { :controller => 'schedules', :action => 'index' }, :caption => 'Schedule', :if => Proc.new{User.current.logged?}

@@ -1,8 +1,8 @@
 # German strings go here for Rails i18n
 de:
    #configurations
-   permission_view_schedules: "Planung sehen"
-   permission_edit_schedules: "Planung bearbeiten"
+   permission_view_schedules: "Schedule sehen"
+   permission_edit_schedules: "Schedule bearbeiten"
 
    #informational text
    i_nothing_scheduled: "Für diese Woche ist nichts geplant."
@@ -16,7 +16,6 @@ de:
    title_add_new: "Neue Version hinzufügen"
 
    #label
-   lbl_select_project: "Projekt auswählen"
-   lbl_shift_hours: "Wöchentliche Arbeitszeiten"
+   field_shift_hours: "Wöchentliche Arbeitsstunden"
    lbl_project: "Projekt"
    lbl_back: "Zurück"

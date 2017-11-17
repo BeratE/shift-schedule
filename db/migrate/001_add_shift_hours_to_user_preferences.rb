@@ -1,6 +1,6 @@
 class AddShiftHoursToUserPreferences < ActiveRecord::Migration
   def up
-    add_column :user_preferences, :shift_hours, :integer
+    add_column :user_preferences, :shift_hours, :float
   end
 
   def down

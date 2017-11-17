@@ -16,7 +16,7 @@ en:
    title_add_new: "Add new version"
 
    #label
+   field_shift_hours: "Weekly shift hours"
    lbl_select_project: "Select Project"
-   lbl_shift_hours: "Weekly shift hours"
    lbl_project: "Project"
    lbl_back: "Back"

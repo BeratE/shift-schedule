@@ -1,5 +1,5 @@
 # Shift Schedule
-Schift Schedule is a Redmine plugin for managing the weekly budget of the developers by scheduling them to different projects and versions.
+Schift Schedule is a Redmine plugin for managing the weekly budget of the developers onto different versions of projects.
 
 ## Installation
 - Clone the repository into /#{REDMINE_ROOT}/plugins/
