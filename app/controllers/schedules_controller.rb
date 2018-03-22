@@ -42,9 +42,10 @@ class SchedulesController < ApplicationController
     session[:curr_date] = @curr_date
 
     @project = Project.find(session[:project_id])
-
     @users = get_users_current(@project)
     @versions = get_versions_current
+    @logged_times = get_logged_times
+    @scheduled_times = get_scheduled_times
     @schedules = get_schedules_current
     @schedhash = get_schedhash(@schedules, @users, @versions)
   end
@@ -154,6 +155,24 @@ private
     JOIN (SELECT * FROM projects WHERE projects.id = #{session[:project_id].to_i}) pr ON versions.project_id = pr.id
     WHERE schedules.year = #{session[:curr_date].year} AND schedules.week = #{session[:curr_date].strftime("%V").to_i}
     AND versions.status = 'open'")
+  end
+
+  #get the logged times of users for a project(version) for the given week
+  def get_logged_times
+    TimeEntry.find_by_sql("SELECT issues.fixed_version_id AS version_id,
+    time_entries.user_id, SUM(time_entries.hours) AS hours
+    FROM time_entries JOIN issues ON time_entries.issue_id = issues.id
+    WHERE time_entries.tyear = #{session[:curr_date].strftime("%Y")}
+    AND time_entries.tweek = #{session[:curr_date].strftime("%V")}
+    AND issues.fixed_version_id IS NOT NULL
+    GROUP BY time_entries.user_id, issues.fixed_version_id")
+  end
+
+  #get the sum of the times a user has already scheduled for the given week
+  def get_scheduled_times
+    Schedule.find_by_sql("SELECT schedules.user_id, SUM(hours) AS hours
+    FROM schedules WHERE schedules.year = #{session[:curr_date].strftime("%Y")}
+    AND schedules.week = #{session[:curr_date].strftime("%V")} GROUP BY schedules.user_id")
   end
 
   #sort all schedules in a 2d hash, if any user is not assigned, new schedules will be created

@@ -5,14 +5,14 @@
       <% @versions.each do |version| %>
         <th class="side_border" >
           <%= version.name %>
-          <% if User.current.allowed_to?(:edit_schedules, @project) %>
+          <% if User.current.allowed_to?(:edit_schedules, @project) && !past_week?(@curr_date) %>
             <button type="button" onclick="idSelect(<%=(version.id).to_i%>, true)">-</button>
           <% end %>
           </br><small><%= version.pname %></small>
         </th>
       <% end %>
       <th class="side_border">
-        <% if User.current.allowed_to?(:edit_schedules, @project) %>
+        <% if User.current.allowed_to?(:edit_schedules, @project) && !past_week?(@curr_date) %>
           <a href="/schedules/new" class="button">+Version</a>
         <% end %>
       </th>
@@ -24,16 +24,19 @@
         </td>
         <% @versions.each do |version| %>
           <td>
-            <% if User.current.allowed_to?(:edit_schedules, @project) %>
+            <% if User.current.allowed_to?(:edit_schedules, @project) && !past_week?(@curr_date) %>
               <input id="<%="#{user.id}|#{version.id}"%>" name="<%="#{user.id}|#{version.id}"%>"
               size = "6" type="text" value="<%= @schedhash[[user.id, version.id]] %>"/>
             <% else %>
               <%= @schedhash[[user.id, version.id]] %>
             <% end %>
+            <% if past_week?(@curr_date) %>
+              <%= "(#{user_logged_time(user, version, @logged_times)})" %>
+            <% end %>
           </td>
         <% end %>
-        <td <% if (ava_time(user) < sum_user_time(user, @versions, @schedhash)) %> style="background-color: #ba0022;" <%end%>>
-          <%= "#{sum_user_time(user, @versions, @schedhash)} / #{ava_time(user)}" %>
+        <td <% if (ava_time(user, @scheduled_times) < sum_user_time(user, @versions, @schedhash)) %> style="background-color: #ba0022;" <%end%>>
+          <%= "#{sum_user_time(user, @versions, @schedhash)} / #{ava_time(user, @scheduled_times)} | (#{total_time(user)})" %>
         </td>
       </tr>
     <% end %>
@@ -45,7 +48,7 @@
       <td><%= sum_user_version_time(@users, @versions, @schedhash) %></td>
     </tr>
   </table>
-<% if User.current.allowed_to?(:edit_schedules, @project) %>
+<% if User.current.allowed_to?(:edit_schedules, @project) && !past_week?(@curr_date) %>
   <%= submit_tag("Save") %>
 <% end %>
 <% end %>
