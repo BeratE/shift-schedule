@@ -29,6 +29,7 @@ if a project has already been selected.
 Clicking on a version will add that version to the selected week for scheduling.
 - Hours of assigned users can be freely edited, a click on the 'save' button will save the edited hours.
 - Clicking on the '-' next to the version names will delete that version from the week (including all the corresponding scheduled hours).
+- The 'User Overview' Tab lists a table of all assigned schedules for the selected year over all users assigned to the correspond project.
 
 ## Notes
 - Mind that only members with set shift hours are listed in the scheduling view. The default for unset shift hours is NULL.

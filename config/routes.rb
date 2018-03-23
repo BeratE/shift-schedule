@@ -8,3 +8,5 @@ get '/schedules/new', to: 'schedules#new'
 post '/schedules/edit', to: 'schedules#edit'
 post '/schedules/create', to: 'schedules#create'
 post '/schedules/delete', to: 'schedules#delete'
+
+get '/schedules/users', to: 'schedules#users'

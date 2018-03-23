@@ -1,7 +1,7 @@
 require 'date'
 class SchedulesController < ApplicationController
   before_action :require_login
-  before_action :require_project, :authorize, :except => [:index, :sel_pr]
+  before_action :require_project, :authorize, :except => [:index, :sel_pr, :users]
 
   #list projects current user is involved in
   def index
@@ -96,6 +96,18 @@ class SchedulesController < ApplicationController
     end
 
     redirect_to controller: 'schedules', action: 'view', schedule_date: form_date
+  end
+
+  def users
+    @curr_date = Time.now
+    @project = Project.find(session[:project_id])
+    @users = get_users_current(@project)
+    @versions = Schedule.find_by_sql("SELECT DISTINCT schedules.version_id, versions.name AS version_name,
+    projects.id AS project_id, projects.name AS project_name
+    FROM schedules JOIN versions ON schedules.version_id = versions.id JOIN projects
+    ON versions.project_id = projects.id WHERE schedules.year = #{@curr_date.year}")
+    @schedules = Schedule.find_by_sql("SELECT schedules.user_id, schedules.week, schedules.version_id, SUM(schedules.hours) AS hours
+    FROM schedules WHERE schedules.year = #{@curr_date.year} GROUP BY schedules.user_id, schedules.version_id, schedules.week")
   end
 
 ############################################################################################################################################

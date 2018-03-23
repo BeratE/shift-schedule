@@ -1,0 +1,49 @@
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag("schedules", :plugin => "shift_schedule") %>
+  <%= javascript_include_tag("script", :plugin => "shift_schedule") %>
+<% end %>
+
+<div class="container">
+  <div class="head">
+    <h2 class="title"><%= l :lbl_view_users %> : <%= "#{@curr_date.year}" %></h2>
+  </div>
+  <div class="main">
+    <div style="margin: 20px;">
+      <a href="/schedules/view?schedule_date=<%=format_time(session[:curr_date])%>" class="button"><%= l :lbl_back %></a>
+    </div>
+    <% curr_week = Integer(@curr_date.strftime("%V")) %>
+    <% @users.each do |user| %>
+      <div class="user_table_wrapper">
+        <table class="users_table">
+          <tr>
+            <th <% if (user.id == User.current.id) %> style="background-color: Lavender;" <% end %>>
+              <%="#{user.firstname}"%><br><%="#{user.lastname}"%>
+            </th>
+            <th></th>
+            <% (1..52).each do |n| %>
+              <th <% if curr_week == n %> style="background-color:#99e6ff;" <% end %>><%= "#{n}" %></th>
+            <% end %>
+          </tr>
+          <% @versions.each do |version| %>
+            <tr>
+              <td><small><%= "#{version.project_name}" %></small></td>
+              <td><%= "#{version.version_name}" %></td>
+              <% (1..52).each do |n| %>
+                <% entry = @schedules.find{|s| s[:user_id] == user.id && s[:version_id] == version.version_id && s[:week] == n} %>
+                <% if (!entry.nil? && entry.hours > 0.0) %>
+                  <td><b><%= "#{entry.hours}" %></b></td>
+                <% else  %>
+                  <td style="color:#bbcbcb;"><b> 0.0 </b></td>
+                <% end %>
+              <% end %>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    <% end %>
+
+    <div style="margin: 20px;">
+      <a href="/schedules/view?schedule_date=<%=format_time(session[:curr_date])%>" class="button"><%= l :lbl_back %></a>
+    </div>
+  </div>
+</div>

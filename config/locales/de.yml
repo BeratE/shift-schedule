@@ -17,5 +17,8 @@ de:
 
    #label
    field_shift_hours: "Wöchentliche Arbeitsstunden"
+   lbl_select_project: "Projekt wählen"
    lbl_project: "Projekt"
    lbl_back: "Zurück"
+   lbl_view_users: "Benutzer Übersicht"
+   lbl_week: "Woche"

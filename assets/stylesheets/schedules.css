@@ -97,3 +97,18 @@ a.button {
   cursor:pointer;
   background-color: gainsboro;
 }
+
+.user_table_wrapper {
+  margin-left: 20px;
+  margin-top: 20px
+  width: 98%;
+  overflow: auto;
+}
+
+.users_table tr td {
+  padding-left: 10px;
+}
+
+.users_table tr:hover {
+    background-color: #b9e2f6;
+}
